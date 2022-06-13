@@ -1,0 +1,14 @@
+{
+  "name": "nfactorial-hw-0610-npm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "git": "git add . && git commit -m",
+    "postgit": "git push --all"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

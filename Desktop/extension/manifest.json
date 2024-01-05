@@ -1,0 +1,30 @@
+{
+  "name": "Text Helper",
+  "description": "",
+  "version": "1.0.3",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "replace-phrases": {
+      "suggested_key": "Alt+R",
+      "description": "Trigger text replacement"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["./content.js", "./utils.js"]
+    },
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["./textboxselection.js"]
+    }
+  ],
+  "permissions": ["storage", "tabs", "scripting", "contextMenus"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "host_permissions": ["http://*/*", "https://*/*"]
+}

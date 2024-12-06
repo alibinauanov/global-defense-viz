@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import Maps from './maps';
 import Top15Chart from './barChart';
+import LineChart from './lineChart';
 
 export default function Main() {
   const [data, setData] = useState([]); // Initialize with an empty array
@@ -45,6 +46,10 @@ export default function Main() {
         <h2>Top 15 Bar Chart</h2>
         <Top15Chart data={data} />
       </div>
+      <div>
+      <h2> Line Chart</h2>
+      <LineChart data={data} />
+    </div>\
     </div>
   );
 }

@@ -1,25 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
-// Dynamically import Plotly with SSR disabled
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
-const Top15Chart = ({ data }) => {
+const Top15Chart = ({ data, selectedCountry, setSelectedCountry }) => {
   const [selectedColumn, setSelectedColumn] = useState('');
   const [top15, setTop15] = useState([]);
 
   useEffect(() => {
     if (selectedColumn) {
       const sortedData = [...data]
+        .filter(d => !isNaN(Number(d[selectedColumn]))) 
         .sort((a, b) => b[selectedColumn] - a[selectedColumn])
         .slice(0, 15);
       setTop15(sortedData);
+    } else {
+      setTop15([]);
     }
   }, [selectedColumn, data]);
 
   const numericColumns = Object.keys(data[0] || {}).filter(
     (key) => !isNaN(Number(data[0][key]))
   );
+
+  const colors = top15.map(item =>
+    item.Country === selectedCountry ? 'orange' : 'steelblue'
+  );
+
+  const handleBarClick = (event) => {
+    if (event && event.points && event.points.length > 0) {
+      const point = event.points[0];
+      const countryName = top15[point.pointNumber].Country;
+      setSelectedCountry(countryName);
+    }
+  };
 
   return (
     <div>
@@ -36,7 +50,7 @@ const Top15Chart = ({ data }) => {
         ))}
       </select>
 
-      {selectedColumn && (
+      {selectedColumn && top15.length > 0 && (
         <Plot
           data={[
             {
@@ -44,12 +58,16 @@ const Top15Chart = ({ data }) => {
               y: top15.map((item) => item.Country),
               type: 'bar',
               orientation: 'h',
+              marker: {
+                color: colors
+              }
             },
           ]}
           layout={{
             title: `Top 15 by ${selectedColumn}`,
             yaxis: { automargin: true },
           }}
+          onClick={handleBarClick}
         />
       )}
     </div>

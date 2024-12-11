@@ -5,7 +5,8 @@ import Top15Chart from './barChart';
 import LineChart from './lineChart';
 
 export default function Main() {
-  const [data, setData] = useState([]); // Initialize with an empty array
+  const [data, setData] = useState([]); 
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,10 +22,10 @@ export default function Main() {
           header: true,
           skipEmptyLines: true,
         });
-        setData(parsed.data || []); // Ensure data is always an array
+        setData(parsed.data || []);
       } catch (error) {
         console.error('Error fetching or parsing the CSV file:', error);
-        setData([]); // Fallback to an empty array in case of error
+        setData([]); 
       }
     };
 
@@ -40,16 +41,17 @@ export default function Main() {
       <h1>Interactive Visualizations</h1>
       <div>
         <h2>World Map</h2>
-        <Maps />
+        <Maps selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} />
       </div>
       <div>
         <h2>Top 15 Bar Chart</h2>
-        <Top15Chart data={data} />
+        {/* Pass setSelectedCountry to allow clicking on the bar chart to update selection */}
+        <Top15Chart data={data} selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} />
       </div>
       <div>
-      <h2> Line Chart</h2>
-      <LineChart data={data} />
-    </div>\
+        <h2>Line Chart</h2>
+        <LineChart data={data} selectedCountry={selectedCountry} />
+      </div>
     </div>
   );
 }

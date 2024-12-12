@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
-import Maps from './maps';
+import Map from './maps';
 import Top15Chart from './barChart';
 import LineChart from './lineChart';
 
@@ -37,42 +37,15 @@ export default function Main() {
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
-        padding: '20px',
-        fontFamily: 'sans-serif',
-      }}
-    >
-      <h1 style={{ marginBottom: '40px' }}>Interactive Visualizations</h1>
-
-      {/* First level: World Map */}
-      <div style={{ marginBottom: '60px', width: '100%', maxWidth: '800px' }}>
-        <h2>World Map</h2>
-        <Maps
-          selectedCountry={selectedCountry}
-          setSelectedCountry={setSelectedCountry}
-        />
-      </div>
-
-      {/* Second level: Top 15 Bar Chart */}
-      <div style={{ marginBottom: '60px', width: '100%', maxWidth: '800px' }}>
-        <h2>Top 15 Bar Chart</h2>
-        <Top15Chart
-          data={data}
-          selectedCountry={selectedCountry}
-          setSelectedCountry={setSelectedCountry}
-        />
-      </div>
-
-      {/* Third level: Line Chart */}
-      <div style={{ marginBottom: '60px', width: '100%', maxWidth: '800px' }}>
-        <h2>Line Chart</h2>
-        <LineChart data={data} selectedCountry={selectedCountry} />
-      </div>
+    <div style={{ textAlign: 'center', fontFamily: 'sans-serif' }}>
+      <h1>Globe defense dynamics</h1>
+      <Map selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} />
+      <Top15Chart
+        data={data}
+        selectedCountry={selectedCountry}
+        setSelectedCountry={setSelectedCountry}
+      />
+      <LineChart data={data} selectedCountry={selectedCountry} />
     </div>
   );
 }

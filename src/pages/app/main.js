@@ -11,7 +11,7 @@ export default function Main() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/datasets/merged_dataset.csv');
+        const response = await fetch('/datasets/merged_dataset3.csv');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }

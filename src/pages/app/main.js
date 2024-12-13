@@ -12,13 +12,8 @@ export default function Main() {
     const fetchData = async () => {
       try {
         const response = await fetch('/datasets/merged_dataset3.csv');
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder('utf-8');
-        const csvData = await reader.read();
-        const parsed = Papa.parse(decoder.decode(csvData.value), {
+        const csvData = await response.text();
+        const parsed = Papa.parse(csvData, {
           header: true,
           skipEmptyLines: true,
         });
@@ -33,19 +28,69 @@ export default function Main() {
   }, []);
 
   if (data.length === 0) {
-    return <p>Loading data...</p>;
+    return (
+      <p style={{ textAlign: 'center', fontFamily: 'Roboto, sans-serif' }}>
+        Loading data...
+      </p>
+    );
   }
 
   return (
-    <div style={{ textAlign: 'center', fontFamily: 'sans-serif' }}>
-      <h1>Globe defense dynamics</h1>
-      <Map selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} />
+    <div
+      style={{
+        textAlign: 'center',
+        fontFamily: 'Roboto, sans-serif',
+        backgroundColor: '#f5f7fa',
+        padding: '20px',
+        minHeight: '100vh',
+      }}
+    >
+      <h1 style={{ color: '#4a90e2', fontSize: '2.5em', marginBottom: '20px' }}>
+        Globe Defense Dynamics
+      </h1>
+
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: '20px',
+          marginBottom: '30px',
+        }}
+      >
+        {/* Map component */}
+        <div
+          style={{
+            flex: '1 1 45%',
+            maxWidth: '700px',
+            minWidth: '300px',
+            position: 'relative',
+            right: '38px'
+          }}
+        >
+          <Map selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} />
+        </div>
+
+        {/* Line chart component */}
+        <div
+          style={{
+            flex: '1 1 45%',
+            maxWidth: '800px',
+            minWidth: '300px',
+            position: 'relative',
+            right: '50px'
+          }}
+        >
+          <LineChart data={data} selectedCountry={selectedCountry} />
+        </div>
+      </div>
+
+      {/* Bar chart below */}
       <Top15Chart
         data={data}
         selectedCountry={selectedCountry}
         setSelectedCountry={setSelectedCountry}
       />
-      <LineChart data={data} selectedCountry={selectedCountry} />
     </div>
   );
 }

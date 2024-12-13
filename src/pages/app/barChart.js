@@ -70,10 +70,30 @@ const Top15Chart = ({ data, selectedCountry, setSelectedCountry }) => {
   };
 
   return (
-    <div>
-      <div style={{ display: 'flex', alignItems: 'center', marginTop: '20px', marginLeft: '410px' }}>
+    <div
+      style={{
+        margin: '20px auto',
+        maxWidth: '800px',
+        textAlign: 'center',
+        backgroundColor: '#f0f4f8',
+        padding: '20px',
+        borderRadius: '12px',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+      }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <div>
-          <label htmlFor="year-slider" style={{ marginRight: '10px' }}>Select Year: {selectedYear}</label>
+          <label
+            htmlFor="year-slider"
+            style={{
+              marginRight: '10px',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              color: '#4a90e2',
+            }}
+          >
+            Select Year: {selectedYear}
+          </label>
           <input
             type="range"
             id="year-slider"
@@ -82,14 +102,31 @@ const Top15Chart = ({ data, selectedCountry, setSelectedCountry }) => {
             value={years.indexOf(selectedYear)}
             onChange={(e) => setSelectedYear(years[e.target.value])}
             step="1"
+            style={{ accentColor: '#4a90e2', cursor: 'pointer' }}
           />
         </div>
         <div style={{ marginLeft: '30px' }}>
-          <label htmlFor="column-select" style={{ marginRight: '6px' }}>Select Column:</label>
+          <label
+            htmlFor="column-select"
+            style={{
+              marginRight: '6px',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              color: '#4a90e2',
+            }}
+          >
+            Select Column:
+          </label>
           <select
             id="column-select"
             value={selectedColumn}
             onChange={(e) => setSelectedColumn(e.target.value)}
+            style={{
+              padding: '5px',
+              borderRadius: '4px',
+              border: '1px solid #ccc',
+              cursor: 'pointer',
+            }}
           >
             {featureColumns.map((key) => (
               <option key={key} value={key}>
@@ -118,10 +155,16 @@ const Top15Chart = ({ data, selectedCountry, setSelectedCountry }) => {
             },
           ]}
           layout={{
-            title: `Top 15 by ${selectedColumn} in ${selectedYear}`,
-            yaxis: { automargin: true },
+            title: {
+              text: `Top 15 by ${selectedColumn} in ${selectedYear}`,
+              font: { size: 18, color: '#4a90e2' },
+            },
+            yaxis: { automargin: true, title: { text: 'Countries' } },
+            xaxis: { title: { text: selectedColumn }, tickformat: ',.0f' },
+            margin: { l: 100, r: 20, t: 50, b: 90 },
           }}
           onClick={handleBarClick}
+          style={{ marginTop: '20px' }}
         />
       )}
     </div>

@@ -4,23 +4,44 @@ import React, { useRef, useEffect, useState } from "react";
 import { json, zoom, select } from "d3";
 import { geoPath, geoEqualEarth } from "d3-geo";
 
-const mapUrl = 'https://gist.githubusercontent.com/hogwild/26558c07f9e4e89306f864412fbdba1d/raw/5458902712c01c79f36dc28db33e345ee71487eb/countries.geo.json';
+const mapUrl =
+  'https://gist.githubusercontent.com/hogwild/26558c07f9e4e89306f864412fbdba1d/raw/5458902712c01c79f36dc28db33e345ee71487eb/countries.geo.json';
 
+// Define the useMap hook here
 function useMap(jsonPath) {
-  const [data, setData] = React.useState(null);
-  React.useEffect(() => {
-    json(jsonPath).then(setData);
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch(jsonPath)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        return response.json();
+      })
+      .then(setData)
+      .catch((error) => {
+        setError(error.message);
+      });
   }, [jsonPath]);
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
   return data;
 }
 
+// Define the Map component
 function Map({ selectedCountry, setSelectedCountry }) {
   const width = 700;
   const height = 400;
   const svgRef = useRef();
   const [transform, setTransform] = useState({ k: 1, x: 0, y: 0 });
 
-  const map = useMap(mapUrl);
+  const map = useMap(mapUrl); // Call useMap here
 
   useEffect(() => {
     if (!map) return;
@@ -50,7 +71,13 @@ function Map({ selectedCountry, setSelectedCountry }) {
       ref={svgRef}
       width={width}
       height={height}
-      style={{ border: "1px solid black" }}
+      style={{
+        border: "1px solid black",
+        borderRadius: "8px",
+        boxShadow: "0 2px 5px rgba(0, 0, 0, 0.2)",
+        backgroundColor: "#ffffff",
+        margin: "20px auto",
+      }}
     >
       <g transform={`translate(${transform.x},${transform.y}) scale(${transform.k})`}>
         {map.features.map((feature) => {
@@ -64,7 +91,7 @@ function Map({ selectedCountry, setSelectedCountry }) {
               onClick={() =>
                 setSelectedCountry(selectedCountry === countryName ? null : countryName)
               }
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", transition: "fill 0.3s" }}
             />
           );
         })}
